@@ -1,9 +1,18 @@
 package co.edu.uptc.edakafka.controller;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import co.edu.uptc.edakafka.model.Customer;
 import co.edu.uptc.edakafka.service.CustomerEventProducer;
 import co.edu.uptc.edakafka.service.CustomerService;
@@ -21,17 +30,15 @@ public class CustomerController {
     private static JsonUtils jsonUtils = new JsonUtils();
 
     @PostMapping("/add")
-    public ResponseEntity<String> addCustomer(@RequestBody String customer) {
-        Customer customerObj = jsonUtils.fromJson(customer, Customer.class);
-        customerEventProducer.sendAddCustomerEvent(customerObj);
-        return ResponseEntity.ok("Evento ADD enviado para customer: " + customerObj.getDocument());
+    public ResponseEntity<String> addCustomer(@RequestBody Customer customer) {
+        customerEventProducer.sendAddCustomerEvent(customer);
+        return ResponseEntity.ok("Evento ADD enviado para customer: " + customer.getDocument());
     }
 
     @PutMapping("/edit")
-    public ResponseEntity<String> editCustomer(@RequestBody String customer) {
-        Customer customerObj = jsonUtils.fromJson(customer, Customer.class);
-        customerEventProducer.sendEditCustomerEvent(customerObj);
-        return ResponseEntity.ok("Evento EDIT enviado para customer: " + customerObj.getDocument());
+    public ResponseEntity<String> editCustomer(@RequestBody Customer customer) {
+        customerEventProducer.sendEditCustomerEvent(customer);
+        return ResponseEntity.ok("Evento EDIT enviado para customer: " + customer.getDocument());
     }
 
     @DeleteMapping("/delete/{document}")
