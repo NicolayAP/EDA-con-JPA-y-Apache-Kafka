@@ -1,12 +1,13 @@
 package co.edu.uptc.edakafka.service;
 
-import co.edu.uptc.edakafka.model.Login;
-import co.edu.uptc.edakafka.repository.LoginRepository;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import co.edu.uptc.edakafka.model.Login;
+import co.edu.uptc.edakafka.repository.LoginRepository;
 
 @Service
 public class LoginService {
@@ -34,7 +35,7 @@ public class LoginService {
     }
 
     // Método para buscar un Login asociado a un Customer específico
-    public Optional<Login> getLoginByCustomerId(Long customerId) {
+    public Optional<Login> getLoginByCustomerId(String customerId) {
         return loginRepository.findByCustomerId(customerId);
     }
 }

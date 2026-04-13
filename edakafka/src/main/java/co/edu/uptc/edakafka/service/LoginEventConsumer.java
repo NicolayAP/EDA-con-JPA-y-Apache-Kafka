@@ -1,5 +1,6 @@
 package co.edu.uptc.edakafka.service;
 
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
@@ -7,11 +8,10 @@ import org.springframework.stereotype.Service;
 public class LoginEventConsumer {
 
     // Se configura para escuchar el tópico "login-events"
-    @KafkaListener(topics = "login-events", groupId = "edakafka-group")
-    public void consume(String message) {
-        System.out.println("Evento de Login recibido en consumidor: " + message);
-        
-        // Aquí posteriormente se puede integrar lógica para deserializar el JSON
-        // y responder a los eventos en el sistema.
+    @KafkaListener(topics = "login-events", groupId = "login_group")
+    public void consume(ConsumerRecord<String, String> record) {
+        String eventType = record.key();
+        String message = record.value();
+        System.out.println("[LOGIN CONSUMER] EventType=" + eventType + ", message=" + message);
     }
 }
