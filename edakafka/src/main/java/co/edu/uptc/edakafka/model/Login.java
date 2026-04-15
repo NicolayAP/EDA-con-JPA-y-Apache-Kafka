@@ -16,12 +16,12 @@ public class Login {
     private String password;
     
     // Identificador para relacionarlo con el Customer
-    private Long customerId;
+    private String customerId;
 
     public Login() {
     }
 
-    public Login(String username, String password, Long customerId) {
+    public Login(String username, String password, String customerId) {
         this.username = username;
         this.password = password;
         this.customerId = customerId;
@@ -51,11 +51,11 @@ public class Login {
         this.password = password;
     }
 
-    public Long getCustomerId() {
+    public String getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(Long customerId) {
+    public void setCustomerId(String customerId) {
         this.customerId = customerId;
     }
 }

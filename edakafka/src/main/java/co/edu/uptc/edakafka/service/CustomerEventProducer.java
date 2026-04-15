@@ -3,45 +3,47 @@ package co.edu.uptc.edakafka.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+
 import co.edu.uptc.edakafka.model.Customer;
 import co.edu.uptc.edakafka.utils.JsonUtils;
 
 @Service
 public class CustomerEventProducer {
 
-    private static final String TOPIC_ADD      = "addcustomer_events";
-    private static final String TOPIC_EDIT     = "editcustomer_events";
-    private static final String TOPIC_DELETE   = "deletecustomer_events";
-    private static final String TOPIC_FINDBYID = "findcustomerbyid_events";
-    private static final String TOPIC_FINDALL  = "findallcustomers_events";
+    private static final String TOPIC_CUSTOMER_EVENTS = "customer-events";
+    private static final String EVENT_CREATE = "CUSTOMER_CREATED";
+    private static final String EVENT_UPDATE = "CUSTOMER_UPDATED";
+    private static final String EVENT_DELETE = "CUSTOMER_DELETED";
+    private static final String EVENT_FIND_BY_ID = "CUSTOMER_FIND_BY_ID";
+    private static final String EVENT_FIND_ALL = "CUSTOMER_FIND_ALL";
 
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
+    private void sendCustomerEvent(String eventType, String payload) {
+        kafkaTemplate.send(TOPIC_CUSTOMER_EVENTS, eventType, payload);
+        System.out.println("[CUSTOMER PRODUCER] " + eventType + " enviado: " + payload);
+    }
+
     public void sendAddCustomerEvent(Customer customer) {
         String json = JsonUtils.toJson(customer);
-        kafkaTemplate.send(TOPIC_ADD, json);
-        System.out.println("[PRODUCER] ADD enviado: " + json);
+        sendCustomerEvent(EVENT_CREATE, json);
     }
 
     public void sendEditCustomerEvent(Customer customer) {
         String json = JsonUtils.toJson(customer);
-        kafkaTemplate.send(TOPIC_EDIT, json);
-        System.out.println("[PRODUCER] EDIT enviado: " + json);
+        sendCustomerEvent(EVENT_UPDATE, json);
     }
 
     public void sendDeleteCustomerEvent(String document) {
-        kafkaTemplate.send(TOPIC_DELETE, document);
-        System.out.println("[PRODUCER] DELETE enviado, document: " + document);
+        sendCustomerEvent(EVENT_DELETE, document);
     }
 
     public void sendFindByCustomerIDEvent(String document) {
-        kafkaTemplate.send(TOPIC_FINDBYID, document);
-        System.out.println("[PRODUCER] FINDBYID enviado, document: " + document);
+        sendCustomerEvent(EVENT_FIND_BY_ID, document);
     }
 
     public void sendFindAllOrdersEvent(String trigger) {
-        kafkaTemplate.send(TOPIC_FINDALL, trigger);
-        System.out.println("[PRODUCER] FINDALL enviado");
+        sendCustomerEvent(EVENT_FIND_ALL, trigger);
     }
 }
